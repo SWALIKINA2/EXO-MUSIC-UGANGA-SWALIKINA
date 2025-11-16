@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STKVBUSOGA — SwalikiNa Music & Movies</title>
+  <meta name="description" content="SwalikiNa — Busoga music & movies showcase"/>
+  <meta name="theme-color" content="#071027" />
+  <style>
+    :root{
+      --bg:#071027; --card:#0b1220; --accent:#ffb86b; --muted:#94a3b8; --glass: rgba(255,255,255,0.03); --maxw:1100px; --radius:14px; --glass-2: rgba(255,255,255,0.02);
+      color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,#071027 0%, #07172a 65%);color:#e6eef8;-webkit-font-smoothing:antialiased;padding:20px;display:flex;justify-content:center}
+    .wrap{width:100%;max-width:var(--maxw)}
+
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo .mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ff6b6b);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b1220}
+    h1{font-size:20px;margin:0}
+    .tag{color:var(--muted);font-size:12px}
+
+    nav{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .nav-link{background:transparent;border:none;color:inherit;padding:8px 12px;border-radius:10px;cursor:pointer}
+    .nav-link:hover{background:var(--glass)}
+    .primary{background:linear-gradient(90deg,var(--accent),#ff6b6b);color:#071027;border:none}
+
+    main.card{background:var(--card);padding:14px;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.02)}
+    .hero{display:flex;gap:18px;align-items:center}
+    .hero-left{flex:1}
+    .hero-right{width:220px}
+
+    .search input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+
+    .layout{display:grid;grid-template-columns:1fr 340px;gap:18px;margin-top:18px}
+    .card-section{background:transparent;border-radius:12px;padding:12px}
+    h2{margin:0 0 10px 0}
+
+    .music-list{display:grid;gap:10px}
+    .track{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+    .track .meta{flex:1}
+    .track .title{font-weight:700}
+    .controls{display:flex;gap:8px;align-items:center}
+
+    .movie-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .movie{background:var(--glass-2);padding:8px;border-radius:8px}
+    iframe, video{width:100%;height:150px;border-radius:6px;border:0}
+
+    .uploader{display:flex;flex-direction:column;gap:8px}
+    .uploader input[type=file]{display:block}
+
+    .queue-list{max-height:220px;overflow:auto;padding:6px;border-radius:8px;background:rgba(255,255,255,0.01)}
+
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+
+    .hidden{display:none}
+
+    /* responsive */
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr}
+      .hero-right{display:none}
+      .movie-grid{grid-template-columns:1fr}
+      nav{display:none}
+    }
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    .btn{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">
+        <div class="mark">SB</div>
+        <div>
+          <h1>STKVBUSOGA — SwalikiNa</h1>
+          <div class="tag">Busoga music & movies • Showcase</div>
+        </div>
+      </div>
+      <nav aria-label="Main navigation">
+        <button class="nav-link" data-scrollto="home">Home</button>
+        <button class="nav-link" data-scrollto="music">Music</button>
+        <button class="nav-link" data-scrollto="movies">Movies</button>
+        <button class="nav-link" data-scrollto="upload">Upload</button>
+        <button class="nav-link" data-scrollto="about">About</button>
+        <button class="nav-link primary" id="downloadSite">Download HTML</button>
+      </nav>
+    </header>
+
+    <main class="card" id="home">
+      <section class="hero">
+        <div class="hero-left">
+          <strong style="font-size:18px">Welcome to SwalikiNa — your Busoga beats & film corner</strong>
+          <p class="muted" style="margin:8px 0">Discover local artists, stream music, watch short films, and upload demo content (client-only demo).</p>
+          <div class="search">
+            <input id="globalSearch" placeholder="Search songs, artists, movies..." />
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button class="btn" id="toMusic">Explore Music</button>
+            <button class="btn" id="toMovies">Watch Movies</button>
+          </div>
+        </div>
+        <aside class="hero-right">
+          <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:10px">
+            <div style="font-weight:700">Now Playing</div>
+            <div id="nowPlaying" style="margin-top:8px;color:var(--muted);font-size:14px">Nothing</div>
+            <div style="margin-top:12px">Queue: <span id="queueCount">0</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <div class="layout">
+        <section>
+          <div class="card-section" id="music">
+            <h2>Music — Latest</h2>
+            <div class="music-list" id="musicList">
+              <!-- tracks inserted here -->
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button class="btn" id="shuffleBtn">Shuffle Play</button>
+              <button class="btn" id="clearTracks">Clear Uploaded Tracks</button>
+            </div>
+          </div>
+
+          <div class="card-section" style="margin-top:14px" id="movies">
+            <h2>Movies — Picks</h2>
+            <div class="movie-grid" id="movieGrid">
+              <!-- movies inserted here -->
+            </div>
+          </div>
+
+          <div class="card-section" style="margin-top:14px" id="about">
+            <h2>About STKVBUSOGA</h2>
+            <p class="muted">SwalikiNa celebrates artists and filmmakers from Busoga. This single-file template is built for easy hosting (static) and local demos. To make uploads live for the world, see the server-backed options listed below in the footer.</p>
+          </div>
+        </section>
+
+        <aside>
+          <div class="card-section" id="upload">
+            <h2>Uploader (demo)</h2>
+            <div class="uploader">
+              <label>Upload audio (mp3, wav)</label>
+              <input type="file" id="audioFile" accept="audio/*" multiple />
+              <label>Upload video (mp4) — will appear as playable file below</label>
+              <input type="file" id="videoFile" accept="video/*" multiple />
+              <small class="muted">Files added here are stored in <strong>your browser</strong> (localStorage & session). Use a server to make files public.</small>
+            </div>
+          </div>
+
+          <div class="card-section" style="margin-top:12px">
+            <h2>Playlist / Queue</h2>
+            <div class="queue-list" id="queueList">
+              <!-- queue items -->
+            </div>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <button class="btn" id="playQueue">Play Queue</button>
+              <button class="btn" id="clearQueue">Clear Queue</button>
+            </div>
+          </div>
+
+          <div class="card-section" style="margin-top:12px">
+            <h2>Contact</h2>
+            <p class="muted">Email: <em>info@stk-vbusoga.example</em> (replace with real)</p>
+          </div>
+        </aside>
+      </div>
+
+      <footer>
+        <div>Built for STKVBUSOGA • Single-page demo • <span class="muted">Open the HTML file in any modern browser to run</span></div>
+        <div style="margin-top:6px;font-size:12px;color:var(--muted)">Server tips: Node/Express + S3 (or Supabase) for uploads; Nginx for static hosting; WordPress conversion available on request.</div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- templates -->
+  <template id="trackTpl">
+    <div class="track">
+      <div style="width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,#222,#111);display:flex;align-items:center;justify-content:center;font-weight:700">♪</div>
+      <div class="meta">
+        <div class="title">Title</div>
+        <div class="muted small artist">Artist • Duration</div>
+      </div>
+      <div class="controls">
+        <button class="btn playBtn">Play</button>
+        <button class="btn addQueue">+</button>
+        <a class="btn downloadBtn" download>↓</a>
+        <audio class="hidden" preload="metadata"></audio>
+      </div>
+    </div>
+  </template>
+
+  <template id="movieTpl">
+    <div class="movie">
+      <div style="font-weight:700;margin-bottom:6px">Title</div>
+      <div class="mediaWrap"></div>
+    </div>
+  </template>
+
+  <script>
+    // --- Sample content ---
+    const SAMPLE_TRACKS = [
+      {id:'t1',title:'Busoga Sunrise',artist:'A. Katushabe',src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+      {id:'t2',title:'Lakeside Groove',artist:'N. Ssensalo',src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'}
+    ];
+
+    const SAMPLE_MOVIES = [
+      {id:'m1',title:'Busoga Short — Trailer',type:'youtube',src:'dQw4w9WgXcQ'},
+      {id:'m2',title:'Documentary Clip',type:'youtube',src:'3JZ_D3ELwOQ'}
+    ];
+
+    // --- State ---
+    let tracks = []; // {id,title,artist,src}
+    let movies = [];
+    let queue = [];
+    let currentAudio = null;
+
+    // --- Elements ---
+    const musicListEl = document.getElementById('musicList');
+    const movieGridEl = document.getElementById('movieGrid');
+    const nowPlayingEl = document.getElementById('nowPlaying');
+    const queueListEl = document.getElementById('queueList');
+    const queueCountEl = document.getElementById('queueCount');
+
+    // --- Utilities ---
+    function saveState(){
+      try{
+        localStorage.setItem('stk_tracks', JSON.stringify(tracks.map(t=>({id:t.id,title:t.title,artist:t.artist,src:t.src}))) );
+      }catch(e){console.warn('Could not save state',e)}
+    }
+    function loadState(){
+      const t = localStorage.getItem('stk_tracks');
+      if(t){ try{ tracks = JSON.parse(t); }catch(e){ tracks = SAMPLE_TRACKS.slice(); } }
+      else tracks = SAMPLE_TRACKS.slice();
+      movies = SAMPLE_MOVIES.slice();
+    }
+
+    function formatDuration(sec){ if(!isFinite(sec)) return ''; const m=Math.floor(sec/60); const s=Math.floor(sec%60); return m+':'+String(s).padStart(2,'0'); }
+
+    // --- Rendering ---
+    function renderTracks(filter=''){
+      musicListEl.innerHTML='';
+      tracks.forEach(t=>{
+        if(filter && !(t.title.toLowerCase().includes(filter) || (t.artist||'').toLowerCase().includes(filter))) return;
+        const tpl = document.getElementById('trackTpl').content.cloneNode(true);
+        tpl.querySelector('.title').textContent = t.title;
+        tpl.querySelector('.artist').textContent = (t.artist||'Unknown');
+        const audio = tpl.querySelector('audio'); audio.src = t.src; audio.preload='metadata';
+        const playBtn = tpl.querySelector('.playBtn');
+        playBtn.addEventListener('click', ()=>{
+          if(currentAudio && currentAudio!==audio){ currentAudio.pause(); }
+          audio.play(); currentAudio = audio; nowPlayingEl.textContent = t.title+' — '+(t.artist||'Unknown');
+          addToQueue(t);
+        });
+        const addQueueBtn = tpl.querySelector('.addQueue'); addQueueBtn.addEventListener('click', ()=>{ addToQueue(t); });
+        const downloadBtn = tpl.querySelector('.downloadBtn'); downloadBtn.href = t.src; downloadBtn.setAttribute('download', t.title.replace(/[^a-z0-9]/gi,'_')+'.mp3');
+        audio.addEventListener('loadedmetadata', ()=>{ const artistLine = tpl.querySelector('.artist'); artistLine.textContent = (t.artist||'Unknown') + ' • ' + formatDuration(audio.duration); });
+        musicListEl.appendChild(tpl);
+      })
+    }
+
+    function renderMovies(){
+      movieGridEl.innerHTML='';
+      movies.forEach(m=>{
+        const tpl = document.getElementById('movieTpl').content.cloneNode(true);
+        tpl.querySelector('.movie > div').textContent = m.title;
+        const wrap = tpl.querySelector('.mediaWrap');
+        if(m.type === 'youtube'){
+          const iframe = document.createElement('iframe');
+          iframe.title = m.title; wrap.appendChild(iframe);
+        } else if(m.type === 'video'){
+          const vid = document.createElement('video'); vid.controls = true; vid.src = m.src; wrap.appendChild(vid);
+        }
+        movieGridEl.appendChild(tpl);
+      })
+    }
+
+    function renderQueue(){
+      queueListEl.innerHTML = '';
+      queue.forEach((q,idx)=>{
+        const div = document.createElement('div'); div.style.padding='6px 8px'; div.style.borderBottom='1px solid rgba(255,255,255,0.02)';
+        div.textContent = (idx+1)+'. '+q.title+' — '+(q.artist||'Unknown');
+        queueListEl.appendChild(div);
+      });
+      queueCountEl.textContent = queue.length;
+    }
+
+    function addToQueue(t){ queue.push(t); renderQueue(); }
+
+    // --- Upload handlers (client-only) ---
+    document.getElementById('audioFile').addEventListener('change', (e)=>{
+      const files = Array.from(e.target.files || []);
+      files.forEach(f=>{
+        const url = URL.createObjectURL(f);
+        const item = {id:'u'+Date.now()+Math.random().toString(36).slice(2,7), title: f.name.replace(/\.[^/.]+$/, ''), artist:'Uploaded', src: url};
+        tracks.unshift(item);
+      });
+      saveState(); renderTracks(document.getElementById('globalSearch').value.toLowerCase());
+    });
+
+    document.getElementById('videoFile').addEventListener('change', (e)=>{
+      const files = Array.from(e.target.files || []);
+      files.forEach(f=>{
+        const url = URL.createObjectURL(f);
+        const item = {id:'v'+Date.now()+Math.random().toString(36).slice(2,7), title: f.name.replace(/\.[^/.]+$/, ''), type:'video', src: url};
+        movies.unshift(item);
+      });
+      renderMovies();
+    });
+
+    // --- Controls ---
+    document.getElementById('shuffleBtn').addEventListener('click', ()=>{
+      if(tracks.length===0) return; const copy = tracks.slice(); for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]] } addToQueue(copy[0]); renderQueue();
+    });
+    document.getElementById('clearTracks').addEventListener('click', ()=>{ if(confirm('Clear uploaded tracks from local storage?')){ tracks = SAMPLE_TRACKS.slice(); saveState(); renderTracks(); } });
+
+    document.getElementById('playQueue').addEventListener('click', ()=>{
+      if(queue.length===0){ alert('Queue is empty'); return; }
+      // play first item
+      const first = queue[0];
+      const aud = new Audio(first.src); aud.play(); currentAudio = aud; nowPlayingEl.textContent = first.title+' — '+(first.artist||'Unknown');
+    });
+    document.getElementById('clearQueue').addEventListener('click', ()=>{ queue = []; renderQueue(); });
+
+    // Search
+    document.getElementById('globalSearch').addEventListener('input', (e)=>{ renderTracks(e.target.value.toLowerCase()); });
+
+    // Scroll nav
+    document.querySelectorAll('[data-scrollto]').forEach(btn=>{ btn.addEventListener('click', ()=>{ const id = btn.dataset.scrollto; document.getElementById(id).scrollIntoView({behavior:'smooth'}); }); });
+    document.getElementById('toMusic').addEventListener('click', ()=>{ document.getElementById('music').scrollIntoView({behavior:'smooth'}); });
+    document.getElementById('toMovies').addEventListener('click', ()=>{ document.getElementById('movies').scrollIntoView({behavior:'smooth'}); });
+
+    // Download the single-file HTML (useful to save locally)
+    document.getElementById('downloadSite').addEventListener('click', ()=>{
+      const html = '<!doctype html>
+' + document.documentElement.outerHTML;
+      const blob = new Blob([html], {type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'STKVBUSOGA_SwalikiNa_index.html'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),2000);
+    });
+
+    // init
+    function init(){ loadState(); renderTracks(); renderMovies(); renderQueue(); }
+    init();
+  </script>
+</body>
+</html>
